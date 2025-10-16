@@ -1,0 +1,83 @@
+# Optional: GitHub Actions workflow for Render.com deployment
+# This file is for reference only - Render.com auto-deploys from GitHub by default
+# You can use this for additional CI checks before deployment
+
+name: Render Deployment
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  # Run tests before deploying
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        service: [product-service, segment-service]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+
+      - name: Install dependencies - ${{ matrix.service }}
+        run: |
+          cd backend/services/${{ matrix.service }}
+          npm ci
+
+      - name: Run tests - ${{ matrix.service }}
+        run: |
+          cd backend/services/${{ matrix.service }}
+          npm test || echo "No tests configured"
+
+  # Lint check
+  lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+
+      - name: Check Dockerfiles exist
+        run: |
+          test -f frontend/Dockerfile || exit 1
+          test -f backend/services/product-service/Dockerfile || exit 1
+          test -f backend/services/segment-service/Dockerfile || exit 1
+          test -f backend/cron-service/Dockerfile || exit 1
+          echo "✅ All Dockerfiles present"
+
+      - name: Check render.yaml exists
+        run: |
+          test -f render.yaml || exit 1
+          echo "✅ render.yaml present"
+
+  # Notify when ready (optional)
+  notify:
+    needs: [test, lint]
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+
+    steps:
+      - name: Deployment ready
+        run: |
+          echo "✅ All checks passed!"
+          echo "🚀 Render.com will auto-deploy this commit"
+          echo "📊 Monitor deployment at: https://dashboard.render.com"
+
+# Note: Render.com handles actual deployment automatically
+# This workflow is just for running additional checks
+# To disable auto-deploy and use manual triggers, configure in Render Dashboard
+

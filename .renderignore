@@ -1,0 +1,43 @@
+# Files to ignore during Render deployment
+
+# Node modules (will be installed via npm ci)
+node_modules/
+
+# Test files
+*.test.js
+tests/
+coverage/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# SQLite databases (use PostgreSQL in production)
+*.sqlite
+database.sqlite
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build artifacts (will be rebuilt)
+dist/
+build/
+
+# Git
+.git/
+.gitignore
+
