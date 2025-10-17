@@ -30,11 +30,11 @@ services:
         fromDatabase:
           name: product-listing-db
           property: connectionString
-      - key: WOOCOMMERCE_URL
+      - key: WC_BASE_URL
         sync: false
-      - key: WOOCOMMERCE_CONSUMER_KEY
+      - key: WC_CONSUMER_KEY
         sync: false
-      - key: WOOCOMMERCE_CONSUMER_SECRET
+      - key: WC_CONSUMER_SECRET
         sync: false
 
   # Segment Service - Segment Evaluation API

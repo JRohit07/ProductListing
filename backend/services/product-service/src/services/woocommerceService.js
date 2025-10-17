@@ -2,10 +2,10 @@ const axios = require('axios');
 const Product = require('../models/Product');
 require('dotenv').config();
 
-
-const WC_BASE_URL = 'https://wp-multisite.convertcart.com/wp-json/wc/v3';
-const WC_CONSUMER_KEY = 'ck_af82ae325fbee1c13f31eb26148f4dea473b0f77';
-const WC_CONSUMER_SECRET = 'cs_2d8cc467c5b91a80f5ed18dd3c282ee8299c9445';
+// Load WooCommerce credentials from environment variables
+const WC_BASE_URL = process.env.WC_BASE_URL || process.env.WOOCOMMERCE_URL;
+const WC_CONSUMER_KEY = process.env.WC_CONSUMER_KEY || process.env.WOOCOMMERCE_CONSUMER_KEY;
+const WC_CONSUMER_SECRET = process.env.WC_CONSUMER_SECRET || process.env.WOOCOMMERCE_CONSUMER_SECRET;
 
 class WooCommerceService {
   async fetchProducts(page = 1, perPage = 100) {
