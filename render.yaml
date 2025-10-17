@@ -61,22 +61,26 @@ services:
           property: host
 
   # Cron Service - Background Job for Product Sync
-  - type: worker
-    name: cron-service
-    env: docker
-    dockerfilePath: ./backend/cron-service/Dockerfile
-    dockerContext: ./backend/cron-service
-    plan: free
-    envVars:
-      - key: NODE_ENV
-        value: production
-      - key: PRODUCT_SERVICE_URL
-        fromService:
-          name: product-service
-          type: web
-          property: host
-      - key: SYNC_INTERVAL
-        value: 3600000 # 1 hour in milliseconds
+  # NOTE: Background workers require paid plan ($7/mo minimum)
+  # Commenting out for free tier deployment
+  # You can manually sync products via: POST /api/products/sync
+  # 
+  # - type: worker
+  #   name: cron-service
+  #   env: docker
+  #   dockerfilePath: ./backend/cron-service/Dockerfile
+  #   dockerContext: ./backend/cron-service
+  #   plan: starter  # Requires paid plan
+  #   envVars:
+  #     - key: NODE_ENV
+  #       value: production
+  #     - key: PRODUCT_SERVICE_URL
+  #       fromService:
+  #         name: product-service
+  #         type: web
+  #         property: host
+  #     - key: SYNC_INTERVAL
+  #       value: 3600000 # 1 hour in milliseconds
 
 databases:
   # PostgreSQL Database (shared by product-service and segment-service)
